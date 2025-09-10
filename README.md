@@ -102,7 +102,12 @@ DRIVER_DROWSINESS_ESP32-CAM_DA1/
 │   ├── eye_model.tflite
 │   └── eye_model.h
 │
-└── README.md
+│── README.md
+│
+│
+│── docs
+    │── flowchart-system.png
+    │── AI-model-neural-network-architecture.png
 ```
 
 ---
