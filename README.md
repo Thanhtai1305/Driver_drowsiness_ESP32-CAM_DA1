@@ -1,7 +1,7 @@
 # 🚗 Driver Drowsiness Detection System using ESP32-CAM  
 
 ## 📖 Introduction  
-This project implements a **driver drowsiness detection system** using only the **ESP32-CAM** module.  
+This project implements a **driver drowsiness detection system** using the **ESP32-CAM** module.  
 The system is able to:  
 - Detect **eye state (open/closed)** using a trained deep learning model (TensorFlow → TensorFlow Lite → deployed on ESP32-CAM).  
 - Detect **face orientation (looking forward / turned away / tilted)** using classical image processing techniques (Gaussian blur, Sobel filter, angle calculation, etc.).  
@@ -30,69 +30,79 @@ Captured images are processed on the ESP32-CAM, results are displayed in the Ser
 
 ---
 
-## 🔀 Implemented Cases  ((case-1, case-2 and case-3) branches in this project)
+## 🔀 Implemented Cases  
 
-### 🟢 Case-1: Eye detection without AI + save images to SD () 
+### 🟢 Case-1: Non-AI Eye Detection + Save to SD  
 - Implemented a **non-AI method** for eye detection using image processing techniques.  
 - Captured frames are stored on the **SD card in `.pgm` format**.  
-- Added `Binary images/` folder for OpenCV visualization in Python.  
+- Folder `drowsiness_detected/Binary_images/NOT_AI` contains test outputs.  
 
-### 🟢 Case-2: AI-based eye & face recognition with fixed eye region  
+### 🟢 Case-2: AI-based Eye & Face Recognition (fixed eye region)  
 - Integrated **AI model (`eye_model.h`)** built with TensorFlow Lite.  
 - Eye detection is performed on a **fixed eye region** of the face.  
-- Combined with face detection logic for improved accuracy.  
+- Implemented in `nhan_dien_mat/nhan_dien_mat.ino`.  
 
-### 🟢 Case-3: AI + face orientation with tilted head handling  
+### 🟢 Case-3: AI + Face Orientation with Tilt Handling  
 - Used **AI eye detection** together with **image processing filters** (Gaussian, Sobel).  
 - Added **face tilt angle calculation** to handle cases where the driver’s head is not perfectly straight.  
-- Extended functionality in `nhan_dien_buon_ngu.ino ` and test in file `nhan_dien_buon_ngu_SD.ino`.  
+- Implemented in `nhan_dien_buon_ngu/nhan_dien_buon_ngu.ino` and tested in `nhan_dien_buon_ngu_SD/nhan_dien_buon_ngu_SD.ino`.  
 
 ---
 
 ## 🧠 AI Model Training Workflow  
-The AI workflow for **eye state recognition** is as follows:  
-
 1. **Dataset**  
    - Kaggle dataset of open/closed eyes.  
 
-2. **Preprocessing** (`preprocessed.py`)  
+2. **Preprocessing** (`TRAIN/preprocessed.py`)  
    - Image resizing, grayscale conversion, normalization.  
 
-3. **Model Training** (`train.py`)  
+3. **Model Training** (`TRAIN/train.py`)  
    - Convolutional Neural Network (CNN) built with TensorFlow.  
    - Output: `eye_model.h5`.  
 
 4. **Model Conversion**  
-   - `convert_model.py`: Convert `.h5` → `.tflite`.  
-   - `convert_to_c_array.py`: Convert `.tflite` → `.h` C header file.  
+   - `TRAIN/convert_model.py`: Convert `.h5` → `.tflite`.  
+   - `TRAIN/convert_to_c_array.py`: Convert `.tflite` → `.h`.  
 
 5. **Deployment on ESP32-CAM**  
-   - The final `eye_model.h` is included in the ESP32-CAM sketch.  
+   - The final `eye_model.h` is included in ESP32-CAM sketches.  
    - Inference runs with **TensorFlow Lite for Microcontrollers**.  
 
 ---
 
 ## 📂 Project Structure  
 ```
-Driver_drowsiness_ESP32-CAM_DA1/
-│-- CodeC/                  
-│   ├── nhan_dien_mat.ino          # v1: basic eye + face detection
-│   ├── nhan_dien_buon_ngu.ino     # v2: improved, handles face tilt
-│   └── eye_model.h                # trained AI model in C array format
+DRIVER_DROWSINESS_ESP32-CAM_DA1/
+│-- CodeC/
+│   ├── drowsiness_detected/
+│   │   ├── Binary_images/NOT_AI/       # Non-AI test images
+│   │   └── drowsiness_detected.ino     # main detection sketch
+│   │
+│   ├── nhan_dien_buon_ngu/
+│   │   ├── nhan_dien_buon_ngu.ino      # AI + face tilt detection
+│   │   └── eye_model.h                 # trained AI model (C array)
+│   │
+│   ├── nhan_dien_buon_ngu_SD/
+│   │   ├── Binary_images/final/        # final saved images
+│   │   ├── nhan_dien_buon_ngu_SD.ino   # test with SD storage
+│   │   └── eye_model.h
+│   │
+│   ├── nhan_dien_mat/
+│   │   ├── nhan_dien_mat.ino           # basic AI eye detection
+│   │   └── eye_model.h
+│   │
+│-- TRAIN/
+│   ├── dataset/                        # Kaggle dataset
+│   ├── train.py                        # CNN training
+│   ├── preprocessed.py                 # preprocessing script
+│   ├── convert_model.py                 # .h5 → .tflite
+│   ├── convert_to_c_array.py           # .tflite → .h
+│   ├── test_tt.py                      # test script
+│   ├── eye_model.h5
+│   ├── eye_model.tflite
+│   └── eye_model.h
 │
-│-- TRAIN/                
-│   ├── preprocessed.py             # dataset preprocessing
-│   ├── train.py                    # CNN model training
-│   ├── convert_model.py            # .h5 → .tflite
-│   ├── convert_to_c_array.py       # .tflite → .h
-│   └── dataset/                    # Kaggle dataset (open/closed eyes)
-│
-│-- nhan_dien_buon_ngu_SD/          # saved images from ESP32-CAM
-│   └── *.pgm
-│
-│-- Binary images/                  # OpenCV visualization of .pgm
-│
-└── README.md                       # project documentation
+└── README.md
 ```
 
 ---
@@ -116,7 +126,7 @@ Driver_drowsiness_ESP32-CAM_DA1/
 ---
 
 ## 📜 Usage  
-1. Upload `nhan_dien_buon_ngu.ino` to ESP32-CAM.  
+1. Upload one of the `.ino` sketches (e.g., `nhan_dien_buon_ngu.ino`) to ESP32-CAM.  
 2. Open Serial Monitor to observe detection results.  
 3. Captured `.pgm` images are automatically stored on SD card.  
 4. Use Python + OpenCV to visualize saved images for verification.  
@@ -131,11 +141,8 @@ Driver_drowsiness_ESP32-CAM_DA1/
 
 ---
 
-## 📺 Demo
-[Youtube Demo](https://www.youtube.com/watch?v=XHIIgUVYBc8&list=PLRiJxzEnUSjPVM7qvBsmr5u5ssI-_G2mH&index=2)
-
-You can watch the demo video of the system by clicking on the link above.
-
+## 📺 Demo  
+[Youtube Demo](https://www.youtube.com/watch?v=XHIIgUVYBc8&list=PLRiJxzEnUSjPVM7qvBsmr5u5ssI-_G2mH&index=2)  
 
 ---
 
