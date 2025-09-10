@@ -30,6 +30,25 @@ Captured images are processed on the ESP32-CAM, results are displayed in the Ser
 
 ---
 
+## 🔀 Implemented Cases  ((case-1, case-2 and case-3) branches in this project)
+
+### 🟢 Case-1: Eye detection without AI + save images to SD () 
+- Implemented a **non-AI method** for eye detection using image processing techniques.  
+- Captured frames are stored on the **SD card in `.pgm` format**.  
+- Added `Binary images/` folder for OpenCV visualization in Python.  
+
+### 🟢 Case-2: AI-based eye & face recognition with fixed eye region  
+- Integrated **AI model (`eye_model.h`)** built with TensorFlow Lite.  
+- Eye detection is performed on a **fixed eye region** of the face.  
+- Combined with face detection logic for improved accuracy.  
+
+### 🟢 Case-3: AI + face orientation with tilted head handling  
+- Used **AI eye detection** together with **image processing filters** (Gaussian, Sobel).  
+- Added **face tilt angle calculation** to handle cases where the driver’s head is not perfectly straight.  
+- Extended functionality in `nhan_dien_buon_ngu.ino ` and test in file `nhan_dien_buon_ngu_SD.ino`.  
+
+---
+
 ## 🧠 AI Model Training Workflow  
 The AI workflow for **eye state recognition** is as follows:  
 
@@ -71,6 +90,8 @@ Driver_drowsiness_ESP32-CAM_DA1/
 │-- nhan_dien_buon_ngu_SD/          # saved images from ESP32-CAM
 │   └── *.pgm
 │
+│-- Binary images/                  # OpenCV visualization of .pgm
+│
 └── README.md                       # project documentation
 ```
 
@@ -110,11 +131,16 @@ Driver_drowsiness_ESP32-CAM_DA1/
 
 ---
 
+## 📺 Demo
+[Youtube Demo](https://www.youtube.com/watch?v=XHIIgUVYBc8&list=PLRiJxzEnUSjPVM7qvBsmr5u5ssI-_G2mH&index=2)
+
+You can watch the demo video of the system by clicking on the link above.
+
+
 ---
 
-## 👤 Author
-- **Trần Nguyễn Thành Tài**
-- Major : Computer Engineering   
+## 👤 Author  
+- **Trần Nguyễn Thành Tài**  
+- Major: Computer Engineering  
 - Ho Chi Minh City University of Technology and Education (HCMUTE)  
 - Email: thanhtait4025@gmail.com  
-
