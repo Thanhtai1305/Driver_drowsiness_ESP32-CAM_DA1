@@ -5,8 +5,8 @@ This project implements a **driver drowsiness detection system** using the **ESP
 The system is able to:  
 - Detect **eye state (open/closed)** using a trained deep learning model (TensorFlow → TensorFlow Lite → deployed on ESP32-CAM).  
 - Detect **face orientation (looking forward / turned away / tilted)** using classical image processing techniques (Gaussian blur, Sobel filter, angle calculation, etc.).  
+- Captured images are processed on the ESP32-CAM, results are displayed in the Serial Monitor, and images are saved to an SD card in `.pgm` format for further analysis.  
 ![Driver Drowsiness Demo GIF](https://static.wixstatic.com/media/90b6f2_96cdaef8e55c4447b8ac75564ce13538~mv2.gif)
-Captured images are processed on the ESP32-CAM, results are displayed in the Serial Monitor, and images are saved to an SD card in `.pgm` format for further analysis.  
 
 ---
 
